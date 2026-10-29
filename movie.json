@@ -1,5 +1,5 @@
 {
-  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/niubihu1/tvbox/main/jar/easy1008.jar;md5;b5c71cca5b4e242af6feb755e9cac308 http://oss4liview.moji.com/thd_file/2026/10/26/837a77b77fc98aba6b97856944e94d7c.jpg;md5;722d5c1bdcb1b38fc62874941e060d6b",
+  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/niubihu1/tvbox/main/jar/easy1008.jar;md5;b5c71cca5b4e242af6feb755e9cac308 http://oss4liview.moji.com/thd_file/2026/10/26/837a77b77fc98aba6b97856944e94d7c.jpg;md5;722d5c1bdcb1b38fc62874941e060d6b http://oss4liview.moji.com/thd_file/2026/10/26/837a77b77fc98aba6b97856944e94d7c.jpg;md5;722d5c1bdcb1b38fc62874941e060d6b",
   "sites": [
     {
       "key": "豆瓣",
