@@ -7,13 +7,24 @@
 任何上游(牛虎/9280/自己的tv-cdn)新增站点 -> 重跑本脚本 -> 自动合并 -> 地址不变。
 
 用法：
-    python build_my_library.py            # 合并 A+B+C 并写 movie.json
+    python build_my_library.py            # 合并 A+B+C 并写 movie.json + movie-lite.json
     python build_my_library.py --quality  # 质量优先：排除 9280 杂源(去广告/低清)
     python build_my_library.py --push     # 合并并 git push(走 SSH) 到 movie-sources
 
+产出两个文件（同源，一次跑都生成）：
+    movie.json       完整版：全部站点，含 type=3（依赖 spider jar / 远程JS / Python 脚本）
+                     → 给安卓壳（默影视 / TVBOX / 影视仓），引擎齐全
+    movie-lite.json  纯净版：只含 type!=3 的直连采集站，零外部依赖
+                     → 给引擎不全的壳（Win-Box 桌面版等），保底可用
+
+为什么要有 lite 版：movie.json 里 273 站有 224 个是 type=3，它们要靠
+spider jar(csp_*) 或 ./py/xxx.py、远程 JS 规则才能跑。安卓壳一般自带，
+但 Win-Box(Windows 桌面版，Electron 移植) 对 jar/脚本引擎支持不全，
+喂完整版会看到一堆点不开的站点。lite 版剔除全部 type=3，任何壳都能吃。
+
 去重规则：按站点 key 去重，A(我的精选)优先在前，B(自己的tv-cdn)次之，C(9280)最后。
           lives/parses/rules/flags/ads 同样按名称去重合并。
-spider：合并所有源的 spider(空格分隔)，最大化解析兼容。
+spider：合并所有源的 spider(空格分隔)，最大化解析兼容（仅完整版带）。
 """
 import json
 import os
@@ -128,6 +139,27 @@ def main():
     print(f"\n写出 movie.json: {len(sites)} 站点 / {len(lives)} 直播 / {len(parses)} 解析")
     print(f"  spider: {out['spider'][:80]}...")
 
+    # ── 纯净版：剔除所有 type=3（依赖 spider jar / 远程JS / Python 脚本）──
+    lite_sites = [s for s in sites if str(s.get("type")) != "3"]
+    out_lite = {
+        "spider": "",  # 无 type=3 站点则不需要 jar，留空避免壳白下载
+        "sites": lite_sites,
+        "rules": rules,
+        "flags": flags,
+        "lives": lives,
+        "parses": parses,
+        "ads": ads,
+    }
+    if wallpaper:
+        out_lite["wallpaper"] = wallpaper
+    if danmaku:
+        out_lite["danmaku"] = danmaku
+    dst_lite = os.path.join(here, "movie-lite.json")
+    with open(dst_lite, "w", encoding="utf-8") as f:
+        json.dump(out_lite, f, ensure_ascii=False, indent=2)
+    print(f"写出 movie-lite.json: {len(lite_sites)} 站点（纯直连，无 spider）"
+          f" / {len(lives)} 直播 / {len(parses)} 解析")
+
     if push:
         print("\n>>> git push (SSH) ...")
         subprocess.run(
@@ -135,10 +167,15 @@ def main():
             shell=True, cwd=here,
         )
         msg = "merge: A+B+C 全量整合" if not quality else "merge: 质量优先(A+B, 排除9280)"
-        subprocess.run(f'git add movie.json && git commit -q -m "{msg}"', shell=True, cwd=here)
+        msg += f" | {len(sites)}站 / lite {len(lite_sites)}站"
+        subprocess.run(f'git add movie.json movie-lite.json && git commit -q -m "{msg}"',
+                       shell=True, cwd=here)
+        # Windows 下 shell=True 走 cmd.exe，不认 `VAR=val cmd` 这种 bash 前缀赋值，
+        # 必须用 env 传（否则报 "'GIT_SSH_COMMAND' is not recognized"）。
+        env = os.environ.copy()
+        env["GIT_SSH_COMMAND"] = "ssh -o StrictHostKeyChecking=no"
         rc = subprocess.run(
-            'GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git push origin main',
-            shell=True, cwd=here,
+            "git push origin main", shell=True, cwd=here, env=env,
         ).returncode
         print("push rc =", rc)
 
