@@ -1093,7 +1093,7 @@
     {
       "name": "直播源",
       "type": "multi",
-      "url": "https://cdn.jsdelivr.net/gh/Venus521/tv-cdn@main/live.m3u"
+      "url": "https://fastly.jsdelivr.net/gh/Venus521/tv-cdn@main/live.m3u"
     },
     {
       "name": "Kimentanm",
@@ -1107,6 +1107,16 @@
       "playerType": 2,
       "url": "http://193.123.86.190:14888/TV/iptv.php",
       "ua": "bingcha/1.1 (mianfeifenxiang) "
+    },
+    {
+      "name": "看电视·精选 10-30",
+      "type": "multi",
+      "url": "https://venus-hub.pages.dev/tv/live.m3u"
+    },
+    {
+      "name": "日本动漫 10-30",
+      "type": "multi",
+      "url": "https://venus-hub.pages.dev/tv/jp-anime.m3u"
     }
   ],
   "parses": [
@@ -1229,41 +1239,5 @@
     "mozai.4gtv.tv",
     "pv.vipwm.cc"
   ],
-  "wallpaper": "http://127.0.0.1:9978/proxy?do=wallpaper",
-  "danmaku": [
-    "h",
-    "t",
-    "p",
-    "s",
-    ":",
-    "/",
-    "r",
-    "e",
-    "c",
-    "i",
-    "o",
-    "u",
-    "-",
-    "m",
-    "a",
-    "k",
-    "g",
-    "b",
-    "2",
-    "d",
-    "3",
-    "9",
-    ".",
-    "n",
-    "l",
-    "f",
-    "y",
-    "8",
-    "7",
-    "6",
-    "5",
-    "4",
-    "1",
-    "v"
-  ]
+  "wallpaper": "http://127.0.0.1:9978/proxy?do=wallpaper"
 }
