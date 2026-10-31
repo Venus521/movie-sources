@@ -93,7 +93,9 @@ def dedup_merge(items, keyfn):
 
 
 def mirror_demo_jar(spider):
-    """把上游 spider 指向的 jar 下载并镜像到 jar/demo_spider.jar，返回带 md5 的镜像地址。"""
+    """把上游 spider 指向的 jar 下载并镜像到 jar/demo_spider.jar，返回站点该挂的地址。
+    下载失败时沿用仓库里已有的那份，避免定时任务把 28 个站的 jar 弄丢。"""
+    p = os.path.join(HERE, "jar", "demo_spider.jar")
     src = (spider or "").split(";md5;")[0].strip()
     if not src:
         return None
@@ -101,14 +103,16 @@ def mirror_demo_jar(spider):
         req = urllib.request.Request(src, headers={"User-Agent": "okhttp/3.15"})
         with urllib.request.urlopen(req, timeout=60, context=ctx) as r:
             data = r.read()
+        if not data.startswith(b"PK"):
+            raise ValueError("内容不是 zip/jar")
     except Exception as e:
+        if os.path.exists(p):
+            print(f"  [jar 下载失败] 沿用已镜像的 jar（{e}）")
+            return DEMO_JAR_MIRROR
         print(f"  [jar 镜像失败] {src} -> {e}")
         return None
-    if not data.startswith(b"PK"):
-        print(f"  [jar 镜像失败] 内容不是 zip/jar: {src}")
-        return None
     os.makedirs(os.path.join(HERE, "jar"), exist_ok=True)
-    with open(os.path.join(HERE, "jar", "demo_spider.jar"), "wb") as f:
+    with open(p, "wb") as f:
         f.write(data)
     md5 = hashlib.md5(data).hexdigest()
     print(f"  镜像 jar: {len(data)} bytes md5={md5}")
@@ -206,7 +210,14 @@ def main():
         if label in exclude:
             print(f"  跳过 {label}")
             continue
-        d = fetch(urls)
+        # A 用仓库里现有的 movie.json 当基线：不依赖代理拉自己，删掉的站也不会被 B 源带回来之后又冒出来
+        local_a = os.path.join(HERE, "movie.json")
+        if label == "A_movie" and os.path.exists(local_a):
+            with open(local_a, encoding="utf-8") as f:
+                d = json.load(f)
+            print("  A_movie: 基线取本地 movie.json")
+        else:
+            d = fetch(urls)
         if not d:
             print(f"  !! {label} 全部候选失败，跳过（不影响其余源）")
             continue
@@ -287,8 +298,8 @@ def main():
     if danmaku:
         out_lite["danmaku"] = danmaku[0] if len(danmaku) == 1 else danmaku
     dst_lite = os.path.join(HERE, "movie-lite.json")
-    # lite 在仓库里是 CRLF，跟 movie.json(LF) 保持各自原样，别制造整文件 diff
-    with open(dst_lite, "w", encoding="utf-8") as f:
+    # 统一 LF：本地(Windows)和 GitHub Actions(Linux)写出来必须一致，否则每次定时任务都会整文件 diff
+    with open(dst_lite, "w", encoding="utf-8", newline="\n") as f:
         json.dump(out_lite, f, ensure_ascii=False, indent=2)
     print(f"写出 movie-lite.json: {len(lite_sites)} 站点（纯直连，无 spider）"
           f" / {len(lives)} 直播 / {len(parses)} 解析")
