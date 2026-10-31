@@ -26,32 +26,47 @@ spider jar(csp_*) 或 ./py/xxx.py、远程 JS 规则才能跑。安卓壳一般�
           lives/parses/rules/flags/ads 同样按名称去重合并。
 spider：合并所有源的 spider(空格分隔)，最大化解析兼容（仅完整版带）。
 """
+import hashlib
+import io
 import json
 import os
 import ssl
 import subprocess
 import sys
 import urllib.request
+import zipfile
+
+HERE = os.path.dirname(os.path.abspath(__file__))
 
 ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 UA = {"User-Agent": "Mozilla/5.0"}
 
-# 三个上游源（每个带主用+兜底候选）。B 的 cdn.jsdelivr 在本机 SSL 不稳，用 fastly/gh-proxy。
+# 上游源（每个带主用+兜底候选）。A/B 一律 raw 优先：fastly.jsdelivr 的 @main 有 12h 缓存，
+# 拿旧版本会把最新一次提交的站点"回退"掉。
 SOURCES = [
     ("A_movie", [
-        "https://fastly.jsdelivr.net/gh/Venus521/movie-sources@main/movie.json",
         "https://gh-proxy.com/https://raw.githubusercontent.com/Venus521/movie-sources/main/movie.json",
+        "https://fastly.jsdelivr.net/gh/Venus521/movie-sources@main/movie.json",
     ]),
     ("B_winbox", [
-        "https://fastly.jsdelivr.net/gh/Venus521/tv-cdn@main/winbox-config.json",
         "https://gh-proxy.com/https://raw.githubusercontent.com/Venus521/tv-cdn/main/winbox-config.json",
+        "https://fastly.jsdelivr.net/gh/Venus521/tv-cdn@main/winbox-config.json",
     ]),
     ("C_9280", [
         "https://9280.kstore.vip/newwex.json",
     ]),
+    # D: ggrrttyyiii 的精选 43 站，类在它自己的 jar 里（easy1008 和 wexguard 都没有），
+    # 所以并入时给每个站单独挂 jar，并把这个 jar 镜像到本仓库 jar/ 下，避免依赖对方 CDN。
+    ("D_demo", [
+        "https://gh-proxy.org/raw.githubusercontent.com/ggrrttyyiii/CatVodSpider/refs/heads/main/json/demo.json",
+        "https://fastly.jsdelivr.net/gh/ggrrttyyiii/CatVodSpider@main/json/demo.json",
+    ]),
 ]
+
+# 镜像后的 jar 由 movie-sources 自己托管；md5 在下载时现算
+DEMO_JAR_MIRROR = "https://gh-proxy.com/https://raw.githubusercontent.com/Venus521/movie-sources/main/jar/demo_spider.jar"
 
 
 def fetch(urls):
@@ -77,13 +92,88 @@ def dedup_merge(items, keyfn):
     return out
 
 
+def mirror_demo_jar(spider):
+    """把上游 spider 指向的 jar 下载并镜像到 jar/demo_spider.jar，返回带 md5 的镜像地址。"""
+    src = (spider or "").split(";md5;")[0].strip()
+    if not src:
+        return None
+    try:
+        req = urllib.request.Request(src, headers={"User-Agent": "okhttp/3.15"})
+        with urllib.request.urlopen(req, timeout=60, context=ctx) as r:
+            data = r.read()
+    except Exception as e:
+        print(f"  [jar 镜像失败] {src} -> {e}")
+        return None
+    if not data.startswith(b"PK"):
+        print(f"  [jar 镜像失败] 内容不是 zip/jar: {src}")
+        return None
+    os.makedirs(os.path.join(HERE, "jar"), exist_ok=True)
+    with open(os.path.join(HERE, "jar", "demo_spider.jar"), "wb") as f:
+        f.write(data)
+    md5 = hashlib.md5(data).hexdigest()
+    print(f"  镜像 jar: {len(data)} bytes md5={md5}")
+    # 站点级 jar 只给纯 URL：带 ;md5; 是否被解析取决于壳，纯 URL 两种壳都能吃
+    return DEMO_JAR_MIRROR
+
+
+def load_spider_blobs(spiders):
+    """下载全局 spider 里的 jar（含伪装的图片 jar），返回 dex 字节，用于判断类是否真的存在。"""
+    urls = []
+    for sp in spiders:
+        for tok in sp.split():
+            u = tok.split(";md5;")[0].strip()
+            if u.startswith("http") and u not in urls:
+                urls.append(u)
+    blobs = []
+    for u in urls:
+        try:
+            req = urllib.request.Request(u, headers={"User-Agent": "okhttp/3.15"})
+            with urllib.request.urlopen(req, timeout=60, context=ctx) as r:
+                data = r.read()
+            if data.startswith(b"PK"):
+                z = zipfile.ZipFile(io.BytesIO(data))
+                if "classes.dex" in z.namelist():
+                    blobs.append(z.read("classes.dex"))
+        except Exception as e:
+            print(f"  [spider 检查跳过] {u[:60]} -> {e}")
+    return blobs
+
+
+def class_exists(api, blobs):
+    """api 形如 csp_Xxx，检查 L.../csp 包下是否有该类的定义描述符。"""
+    if not api.startswith("csp_"):
+        return False
+    d = b"Lcom/github/catvod/spider/" + api[4:].encode() + b";"
+    return any(d in b for b in blobs)
+
+
+def prepare_demo_sites(dsites, jar, usable_apis):
+    """D 源的站点：加 demo_ 前缀避开 key 冲突，挂上自己的 jar，跳过库里已有且能正常加载的同类实现。"""
+    out, skipped = [], []
+    for s in dsites:
+        api = s.get("api", "")
+        if not api.startswith("csp_"):
+            continue
+        if api in usable_apis:
+            skipped.append(s.get("name", api))
+            continue
+        s = dict(s)
+        s["key"] = "demo_" + str(s.get("key") or api[4:])
+        if jar:
+            s["jar"] = jar
+        out.append(s)
+    if skipped:
+        print(f"  跳过同类已有 {len(skipped)} 个: {'、'.join(x[:16] for x in skipped)}")
+    return out
+
+
 def main():
     quality = "--quality" in sys.argv
     push = "--push" in sys.argv
 
     # 质量优先：排除 9280 杂源（带回广告/低清解析线）
     exclude = {"C_9280"} if quality else set()
-    print(f"模式: {'质量优先(排除9280)' if quality else '全量合并(A+B+C)'}")
+    print(f"模式: {'质量优先(排除9280)' if quality else '全量合并(A+B+C+D)'}")
 
     sites, lives, parses, rules, flags, ads, danmaku = [], [], [], [], [], [], []
     spiders, wallpaper = [], None
@@ -97,16 +187,33 @@ def main():
             print(f"  !! {label} 全部候选失败，跳过（不影响其余源）")
             continue
         print(f"  {label}: sites={len(d.get('sites', []))} lives={len(d.get('lives', []))} parses={len(d.get('parses', []))}")
-        sites.extend(d.get("sites", []))
+        if label == "D_demo":
+            jar = mirror_demo_jar(d.get("spider"))
+            blobs = load_spider_blobs(spiders)
+            usable = {s.get("api") for s in sites if class_exists(s.get("api", ""), blobs)}
+            print(f"  全局 spider 可解析类: {len(usable)} 个")
+            sites.extend(prepare_demo_sites(d.get("sites", []), jar, usable))
+            # D 的 spider 只给它的站点单独用，不进全局，避免和 easy1008 的同名类打架
+        else:
+            sites.extend(d.get("sites", []))
+            sp = d.get("spider")
+            if sp:
+                spiders.append(sp)
         lives.extend(d.get("lives", []))
         parses.extend(d.get("parses", []))
         rules.extend(d.get("rules", []))
         flags.extend(d.get("flags", []))
         ads.extend(d.get("ads", []) or [])
-        danmaku.extend(d.get("danmaku", []) or [])
-        sp = d.get("spider")
-        if sp:
-            spiders.append(sp)
+        dm = d.get("danmaku")
+        # 上游有把字符串 extend 成单字符数组的坏数据（join 后已不可还原），只收完整字符串
+        if isinstance(dm, str):
+            danmaku.append(dm)
+        elif isinstance(dm, list):
+            joined = "".join(x for x in dm if isinstance(x, str))
+            if dm and not all(len(x) == 1 for x in dm if isinstance(x, str)):
+                danmaku.append(joined)
+            else:
+                print(f"  丢弃损坏的 danmaku（单字符数组，{len(dm)} 项）")
         if not wallpaper and d.get("wallpaper"):
             wallpaper = d.get("wallpaper")
 
@@ -119,7 +226,8 @@ def main():
     danmaku = dedup_merge(danmaku, lambda x: x if isinstance(x, str) else json.dumps(x, ensure_ascii=False)[:80])
 
     out = {
-        "spider": " ".join(dict.fromkeys(spiders)),
+        # 按 token 去重：各源的 spider 往往是同一份，整串去重会拼出重复 jar
+        "spider": " ".join(dict.fromkeys(t for sp in spiders for t in sp.split())),
         "sites": sites,
         "rules": rules,
         "flags": flags,
@@ -130,11 +238,10 @@ def main():
     if wallpaper:
         out["wallpaper"] = wallpaper
     if danmaku:
-        out["danmaku"] = danmaku
+        out["danmaku"] = danmaku[0] if len(danmaku) == 1 else danmaku
 
-    here = os.path.dirname(os.path.abspath(__file__))
-    dst = os.path.join(here, "movie.json")
-    with open(dst, "w", encoding="utf-8") as f:
+    dst = os.path.join(HERE, "movie.json")
+    with open(dst, "w", encoding="utf-8", newline="\n") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
     print(f"\n写出 movie.json: {len(sites)} 站点 / {len(lives)} 直播 / {len(parses)} 解析")
     print(f"  spider: {out['spider'][:80]}...")
@@ -153,8 +260,9 @@ def main():
     if wallpaper:
         out_lite["wallpaper"] = wallpaper
     if danmaku:
-        out_lite["danmaku"] = danmaku
-    dst_lite = os.path.join(here, "movie-lite.json")
+        out_lite["danmaku"] = danmaku[0] if len(danmaku) == 1 else danmaku
+    dst_lite = os.path.join(HERE, "movie-lite.json")
+    # lite 在仓库里是 CRLF，跟 movie.json(LF) 保持各自原样，别制造整文件 diff
     with open(dst_lite, "w", encoding="utf-8") as f:
         json.dump(out_lite, f, ensure_ascii=False, indent=2)
     print(f"写出 movie-lite.json: {len(lite_sites)} 站点（纯直连，无 spider）"
@@ -164,12 +272,12 @@ def main():
         print("\n>>> git push (SSH) ...")
         subprocess.run(
             "git remote set-url origin git@github.com:Venus521/movie-sources.git",
-            shell=True, cwd=here,
+            shell=True, cwd=HERE,
         )
-        msg = "merge: A+B+C 全量整合" if not quality else "merge: 质量优先(A+B, 排除9280)"
+        msg = "merge: A+B+C+D 全量整合" if not quality else "merge: 质量优先(A+B+D, 排除9280)"
         msg += f" | {len(sites)}站 / lite {len(lite_sites)}站"
-        subprocess.run(f'git add movie.json movie-lite.json && git commit -q -m "{msg}"',
-                       shell=True, cwd=here)
+        subprocess.run(f'git add movie.json movie-lite.json jar build_my_library.py && git commit -q -m "{msg}"',
+                       shell=True, cwd=HERE)
         # Windows 下 shell=True 走 cmd.exe，不认 `VAR=val cmd` 这种 bash 前缀赋值，
         # 必须用 env 传（否则报 "'GIT_SSH_COMMAND' is not recognized"）。
         env = os.environ.copy()
