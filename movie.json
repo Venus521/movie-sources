@@ -3738,9 +3738,9 @@
       "url": "https://venus-hub.pages.dev/tv/live.m3u"
     },
     {
-      "name": "日本动漫 10-30",
+      "name": "追剧轮播·动漫+剧集",
       "type": "multi",
-      "url": "https://venus-hub.pages.dev/tv/jp-anime.m3u"
+      "url": "https://fastly.jsdelivr.net/gh/Venus521/movie-sources@main/loop.m3u"
     }
   ],
   "parses": [
