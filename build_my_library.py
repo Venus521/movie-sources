@@ -117,14 +117,14 @@ def mirror_demo_jar(spider):
 
 
 def load_spider_blobs(spiders):
-    """下载全局 spider 里的 jar（含伪装的图片 jar），返回 dex 字节，用于判断类是否真的存在。"""
+    """下载全局 spider 里的 jar（含伪装的图片 jar），返回 (dex 字节列表, 失败数)。"""
     urls = []
     for sp in spiders:
         for tok in sp.split():
             u = tok.split(";md5;")[0].strip()
             if u.startswith("http") and u not in urls:
                 urls.append(u)
-    blobs = []
+    blobs, failed = [], 0
     for u in urls:
         try:
             req = urllib.request.Request(u, headers={"User-Agent": "okhttp/3.15"})
@@ -134,9 +134,33 @@ def load_spider_blobs(spiders):
                 z = zipfile.ZipFile(io.BytesIO(data))
                 if "classes.dex" in z.namelist():
                     blobs.append(z.read("classes.dex"))
+                else:
+                    failed += 1
+            else:
+                failed += 1
         except Exception as e:
+            failed += 1
             print(f"  [spider 检查跳过] {u[:60]} -> {e}")
-    return blobs
+    return blobs, failed
+
+
+def drop_unresolvable(sites, spiders):
+    """兜底：csp_ 站点既没挂自己的 jar、类也不在任何 spider jar 里，就是点开必报错的死站，删掉。
+    任一个 jar 下载失败就不删（宁可留着也不误杀）。"""
+    blobs, failed = load_spider_blobs(spiders)
+    if failed:
+        print(f"  [跳过死站清理] 有 {failed} 个 spider jar 下载失败，避免误杀")
+        return sites
+    kept, dropped = [], []
+    for s in sites:
+        api = s.get("api", "")
+        if api.startswith("csp_") and not s.get("jar") and not class_exists(api, blobs):
+            dropped.append(s)
+            continue
+        kept.append(s)
+    if dropped:
+        print(f"  清理死站 {len(dropped)} 个: {'、'.join(str(s.get('key'))[:12] for s in dropped)}")
+    return kept
 
 
 def class_exists(api, blobs):
@@ -189,7 +213,7 @@ def main():
         print(f"  {label}: sites={len(d.get('sites', []))} lives={len(d.get('lives', []))} parses={len(d.get('parses', []))}")
         if label == "D_demo":
             jar = mirror_demo_jar(d.get("spider"))
-            blobs = load_spider_blobs(spiders)
+            blobs, _ = load_spider_blobs(spiders)
             usable = {s.get("api") for s in sites if class_exists(s.get("api", ""), blobs)}
             print(f"  全局 spider 可解析类: {len(usable)} 个")
             sites.extend(prepare_demo_sites(d.get("sites", []), jar, usable))
@@ -218,6 +242,7 @@ def main():
             wallpaper = d.get("wallpaper")
 
     sites = dedup_merge(sites, lambda s: s.get("key"))
+    sites = drop_unresolvable(sites, spiders)
     lives = dedup_merge(lives, lambda x: (x.get("name") or str(x))[:40])
     parses = dedup_merge(parses, lambda x: x.get("name") or json.dumps(x, ensure_ascii=False)[:60])
     rules = dedup_merge(rules, lambda x: x.get("name") or json.dumps(x, ensure_ascii=False)[:60])
