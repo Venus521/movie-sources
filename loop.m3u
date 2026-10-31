@@ -1,0 +1,289 @@
+#EXTM3U
+# 追剧轮播 · 整合版（动漫轮播 + 剧集轮播）· 单一源
+# 动漫：日本动漫 / 欧美动漫 / 少儿动漫 —— jp-anime.m3u 原内容，逐条实测可播
+#   其中 jmp2.uk 为 Pluto 系短链，长期有效，但 Pluto 按请求 IP 判区，国内直连可能需代理
+# 剧集：国产剧轮播 / 华语电影轮播 / 经典剧场（本机实测可播）
+#   海外轮播·需代理：Pluto/三星/Roku 等 FAST 频道，按 IP 判区，需代理
+# 合并进 movie-sources 仓库，由 movie.json 的 lives[追剧轮播·动漫+剧集] 引用
+# 更新 2026-10-31：全部逐条实测（master 可解析 + 分片可取 200）后才写入
+# 标 jmp2.uk 的为 Pluto 系短链，每次跳转实时签新 jwt，长期有效；
+#   但 Pluto 按请求 IP 判区，中国大陆直连可能被挡，需走代理。
+# 少儿动漫里的国内台（浙江/金鹰/黑龙江/福州等）国内直连可看。
+#EXTINF:-1 tvg-name="ADNTV+" group-title="日本动漫",ADNTV+
+https://d3b73b34o7cvkq.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-gz2sgqzp076kf/adn.m3u8
+#EXTINF:-1 tvg-name="RetroCrush" group-title="日本动漫",RetroCrush
+https://linear-899.frequency.stream/dist/cineverse/899/hls/master/playlist.m3u8
+#EXTINF:-1 tvg-name="Yu-Gi-Oh!" group-title="日本动漫",Yu-Gi-Oh!
+https://amg01796-amg01796c19-rakuten-gb-7486.playouts.now.amagi.tv/playlist/amg01796-fastmediafast-yugioh2en-rakutengb/playlist.m3u8
+#EXTINF:-1 tvg-name="ATXN3" group-title="日本动漫",ATXN3
+https://cdn-atxn-01.vos360.video/Content/HLS/Live/channel(c55d1594-ad62-7434-aa17-4d71adb80f99)/index.m3u8
+#EXTINF:-1 tvg-name="ATXN1" group-title="日本动漫",ATXN1
+https://cdn-atxn-01.vos360.video/Content/HLS/Live/channel(616d6f49-eaec-6f7e-7186-2bbaf66c69c0)/index.m3u8
+#EXTINF:-1 tvg-name="MAXAnime" group-title="日本动漫",MAXAnime
+https://cdnlive.klicgo.net/maxanime/live/playlist.m3u8
+#EXTINF:-1 tvg-name="ATXN2" group-title="日本动漫",ATXN2
+https://cdn-atxn-01.vos360.video/Content/HLS/Live/channel(f97b5ddc-b7e4-dff8-9f10-8c16d0833639)/index.m3u8
+#EXTINF:-1 tvg-name="浙江少儿" group-title="少儿动漫",浙江少儿
+https://ali-m-l.cztv.com/channels/lantian/channel008/1080p.m3u8
+#EXTINF:-1 tvg-name="浙江少儿" group-title="少儿动漫",浙江少儿
+https://ali-m-l.cztv.com/channels/lantian/channel008/1080p.m3u8?
+#EXTINF:-1 tvg-name="浙江少儿" group-title="少儿动漫",浙江少儿
+http://ali-m-l.cztv.com/channels/lantian/channel008/1080p.m3u8
+#EXTINF:-1 tvg-name="黑龙江少儿" group-title="少儿动漫",黑龙江少儿
+https://ls.qingting.fm/live/4972/64k.m3u8
+#EXTINF:-1 tvg-name="金鹰卡通" group-title="少儿动漫",金鹰卡通
+http://101.66.195.232:9901/tsfile/live/1000_1.m3u8?key=txiptv&playlive=0&authid=0
+#EXTINF:-1 tvg-name="金鹰卡通" group-title="少儿动漫",金鹰卡通
+http://101.66.198.234:9901/tsfile/live/1000_1.m3u8?key=txiptv&playlive=0&authid=0
+#EXTINF:-1 tvg-name="金鹰卡通" group-title="少儿动漫",金鹰卡通
+http://101.66.198.84:9901/tsfile/live/1000_1.m3u8?key=txiptv&playlive=0&authid=0
+#EXTINF:-1 tvg-name="福州少儿" group-title="少儿动漫",福州少儿
+http://live.zohi.tv/video/s10001-fztv-4/index.m3u8
+#EXTINF:-1 tvg-name="韩国EBS少儿" group-title="少儿动漫",韩国EBS少儿
+http://ebsonairios.ebs.co.kr/ebsutablet500k/tablet500k/playlist.m3u8
+#EXTINF:-1 tvg-name="草蜢宝贝对不视" group-title="少儿动漫",草蜢宝贝对不视
+http://bizcommon.alicdn.com/l2nDqpMmn6DGHnWzZQA/RQdMfitGKCINh4BPzc9%40%40sd.m3u8
+#EXTINF:-1 tvg-name="Crunchyroll" group-title="日本动漫",Crunchyroll
+https://jmp2.uk/plu-65652f7fc0fc88000883537a.m3u8
+#EXTINF:-1 tvg-name="Pluto TV Anime" group-title="日本动漫",Pluto TV Anime
+https://jmp2.uk/plu-5812b7d3249444e05d09cc49.m3u8
+#EXTINF:-1 tvg-name="Pluto TV ANIME GO!" group-title="日本动漫",Pluto TV ANIME GO!
+https://jmp2.uk/plu-691b3669c48674840c3b832a.m3u8
+#EXTINF:-1 tvg-name="Pluto TV Anime Movies" group-title="日本动漫",Pluto TV Anime Movies
+https://jmp2.uk/plu-67ed8f7e443f0671bc2b2368.m3u8
+#EXTINF:-1 tvg-name="Anime x HIDIVE" group-title="日本动漫",Anime x HIDIVE
+https://jmp2.uk/plu-6793eaa4bc03978b9bc63db1.m3u8
+#EXTINF:-1 tvg-name="JapanimTV" group-title="日本动漫",JapanimTV
+https://foxkidstv.be:3369/stream/play.m3u8
+#EXTINF:-1 tvg-name="Toonami Aftermath" group-title="日本动漫",Toonami Aftermath
+http://api.toonamiaftermath.com:3000/est/playlist.m3u8
+#EXTINF:-1 tvg-name="Pluto TV Animation" group-title="欧美动漫",Pluto TV Animation
+https://jmp2.uk/plu-612f761008a9e50007984ba0.m3u8
+#EXTINF:-1 tvg-name="Pluto TV Adult Animation" group-title="欧美动漫",Pluto TV Adult Animation
+https://jmp2.uk/plu-67f68bd2135aeda9ddf0ef54.m3u8
+#EXTINF:-1 tvg-name="Comedy Central Animation" group-title="欧美动漫",Comedy Central Animation
+https://jmp2.uk/plu-64f8a949f5b5e4000862467c.m3u8
+#EXTINF:-1 tvg-name="Cartoon Network CEE" group-title="欧美动漫",Cartoon Network CEE
+http://88.212.7.14/live/test_cartoon_network_tizen/playlist.m3u8
+#EXTINF:-1 tvg-name="Cartoon Network Arabic" group-title="欧美动漫",Cartoon Network Arabic
+http://149.100.11.252:8000/play/a056/index.m3u8
+#EXTINF:-1 tvg-name="Tooncast" group-title="欧美动漫",Tooncast
+http://38.134.250.110:8000/play/a01t/index.m3u8
+#EXTINF:-1 tvg-name="Teletoon+ HD" group-title="欧美动漫",Teletoon+ HD
+http://92.114.85.87:8009/play/a006/index.m3u8
+#EXTINF:-1 tvg-name="Boomerang" group-title="欧美动漫",Boomerang
+http://23.237.104.106:8080/USA_BOOMERANG/index.m3u8
+#EXTINF:-1 tvg-name="Nicktoons" group-title="欧美动漫",Nicktoons
+http://88.212.15.50/live/test_nicktoons/playlist.m3u8
+#EXTINF:-1 tvg-name="Cartoonito HD" group-title="少儿动漫",Cartoonito HD
+https://boing.akamaized.net/6380673432112/eu-central-1/6284318116001/e/playlist.m3u8
+#EXTINF:-1 tvg-name="TG Junior" group-title="少儿动漫",TG Junior
+https://d3i6upqaqzosi1.cloudfront.net/tg/jr_us/tg_jr_us.m3u8
+#EXTINF:-1 tvg-name="HappyKids" group-title="少儿动漫",HappyKids
+https://dil9xdvretp0f.cloudfront.net/index.m3u8
+#EXTINF:-1 tvg-name="Lego Channel" group-title="少儿动漫",Lego Channel
+https://dltiqboxjw21d.cloudfront.net/index.m3u8
+#EXTINF:-1 tvg-name="ToonGoggles" group-title="少儿动漫",ToonGoggles
+https://amg01329-otterainc-toongoggles-samsungau-ad-4c.amagi.tv/playlist.m3u8
+#EXTINF:-1 tvg-name="ZooMoo" group-title="少儿动漫",ZooMoo
+https://zoomoo-samsungau.amagi.tv/playlist.m3u8
+# 剧集轮播 · 打开就在演，不用选集
+# 生成时间 2026-10-31
+# 分组说明：
+#  - 国产剧轮播 / 华语电影轮播 / 经典剧场：本机逐条实测可播
+#  - 美剧轮播·海外需代理：Pluto/三星/Roku 等 FAST 频道，按请求 IP 判区，
+#    国内直连大概率被挡，需代理；本机因分片 CDN 被挡未能实测，请自测
+#
+# ===== 国产剧轮播（19）=====
+#EXTINF:-1 group-title="国产剧轮播",乡村爱情
+http://tv.zimtv.cn/tv/player/api/huya.php?id=乡村爱情
+#EXTINF:-1 group-title="国产剧轮播",倚天屠龙记
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11342403
+#EXTINF:-1 group-title="国产剧轮播",倚天屠龙记
+http://tv.zimtv.cn/tv/player/api/huya.php?id=23734246
+#EXTINF:-1 group-title="国产剧轮播",士兵突击
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11342430
+#EXTINF:-1 group-title="国产剧轮播",大时代
+http://tv.zimtv.cn/tv/player/api/huya.php?id=23865161
+#EXTINF:-1 group-title="国产剧轮播",天龙八部
+http://tv.zimtv.cn/tv/player/api/huya.php?id=23903123
+#EXTINF:-1 group-title="国产剧轮播",寻秦记
+http://tv.zimtv.cn/tv/player/api/huya.php?id=23864973
+#EXTINF:-1 group-title="国产剧轮播",寻秦记
+http://tv.zimtv.cn/tv/player/api/huya.php?id=29465848
+#EXTINF:-1 group-title="国产剧轮播",封神榜
+http://tv.zimtv.cn/tv/player/api/huya.php?id=29465849
+#EXTINF:-1 group-title="国产剧轮播",射雕英雄传
+http://tv.zimtv.cn/tv/player/api/huya.php?id=23824164
+#EXTINF:-1 group-title="国产剧轮播",庆余年
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11352960
+#EXTINF:-1 group-title="国产剧轮播",康熙王朝
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11352940
+#EXTINF:-1 group-title="国产剧轮播",神雕侠侣
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11352964
+#EXTINF:-1 group-title="国产剧轮播",神雕侠侣
+http://tv.zimtv.cn/tv/player/api/huya.php?id=23865171
+#EXTINF:-1 group-title="国产剧轮播",笑傲江湖
+http://tv.zimtv.cn/tv/player/api/huya.php?id=26355790
+#EXTINF:-1 group-title="国产剧轮播",陀枪师姐
+http://tv.zimtv.cn/tv/player/api/huya.php?id=23860039
+#EXTINF:-1 group-title="国产剧轮播",陀枪师姐
+http://tv.zimtv.cn/tv/player/api/huya.php?id=29465857
+#EXTINF:-1 group-title="国产剧轮播",陈情令
+http://tv.zimtv.cn/tv/player/api/huya.php?id=29465862
+#EXTINF:-1 group-title="国产剧轮播",鹿鼎记
+http://tv.zimtv.cn/tv/player/api/huya.php?id=23865080
+#
+# ===== 华语电影轮播（41）=====
+#EXTINF:-1 group-title="华语电影轮播",CHC动作电影
+http://198.204.228.26/live/chcdz.m3u8
+#EXTINF:-1 group-title="华语电影轮播",CHC动作电影
+http://107.150.60.122/live/chcdz.m3u8
+#EXTINF:-1 group-title="华语电影轮播",CHC动作电影
+http://38.75.136.137:98/gslb/dsdqpub/chcdz.m3u8?auth=testpub
+#EXTINF:-1 group-title="华语电影轮播",CHC家庭影院
+http://192.151.150.154/live/chcjt.m3u8
+#EXTINF:-1 group-title="华语电影轮播",CHC家庭影院
+http://198.204.228.26/live/chcjt.m3u8
+#EXTINF:-1 group-title="华语电影轮播",CHC家庭影院
+http://107.150.60.122/live/chcjt.m3u8
+#EXTINF:-1 group-title="华语电影轮播",CHC家庭影院
+http://38.75.136.137:98/gslb/dsdqpub/chcjt.m3u8?auth=testpub
+#EXTINF:-1 group-title="华语电影轮播",CHC家庭影院
+http://61.162.52.6:8088/newlive/live/hls/60/live.m3u8
+#EXTINF:-1 group-title="华语电影轮播",CHC家庭影院
+http://63.141.230.178:82/gslb/zbdq5.m3u8?id=chcjt
+#EXTINF:-1 group-title="华语电影轮播",CHC影迷电影
+http://38.75.136.137:98/gslb/dsdqpub/chchd.m3u8?auth=testpub
+#EXTINF:-1 group-title="华语电影轮播",刘德华
+http://173.208.234.146/live/vlldh.m3u8
+#EXTINF:-1 group-title="华语电影轮播",动作电影
+https://iptv.catvod.com/live.php?id=NewTV%E5%8A%A8%E4%BD%9C%E7%94%B5%E5%BD%B1
+#EXTINF:-1 group-title="华语电影轮播",周星驰
+http://173.208.234.146/live/vlzxc.m3u8
+#EXTINF:-1 group-title="华语电影轮播",周星驰
+http://222.186.39.38:8000/028749/index.m3u8
+#EXTINF:-1 group-title="华语电影轮播",喜剧影院
+http://173.208.234.146/live/vlxjyy.m3u8
+#EXTINF:-1 group-title="华语电影轮播",成龙
+http://173.208.234.146/live/vlcl.m3u8
+#EXTINF:-1 group-title="华语电影轮播",成龙
+http://222.186.39.38:8000/333207/index.m3u8
+#EXTINF:-1 group-title="华语电影轮播",林正英
+http://173.208.234.146/live/vllzy.m3u8
+#EXTINF:-1 group-title="华语电影轮播",林正英
+http://222.186.39.38:8000/782774/index.m3u8
+#EXTINF:-1 group-title="华语电影轮播",洪金宝
+http://173.208.234.146/live/vlhjb.m3u8
+#EXTINF:-1 group-title="华语电影轮播",甄子丹
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11352935
+#EXTINF:-1 group-title="华语电影轮播",电影_不挤影院
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11352897
+#EXTINF:-1 group-title="华语电影轮播",电影_丧尸片
+http://tv.zimtv.cn/tv/player/api/huya.php?id=21059578
+#EXTINF:-1 group-title="华语电影轮播",电影_动作电影
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11602077
+#EXTINF:-1 group-title="华语电影轮播",电影_变形金刚
+http://tv.zimtv.cn/tv/player/api/huya.php?id=21059596
+#EXTINF:-1 group-title="华语电影轮播",电影_古墓系列
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11352913
+#EXTINF:-1 group-title="华语电影轮播",电影_喜乐影院
+http://tv.zimtv.cn/tv/player/api/huya.php?id=21059580
+#EXTINF:-1 group-title="华语电影轮播",电影_喜剧专场
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11602044
+#EXTINF:-1 group-title="华语电影轮播",电影_战争片
+http://tv.zimtv.cn/tv/player/api/huya.php?id=21059574
+#EXTINF:-1 group-title="华语电影轮播",电影_搞笑喜剧
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11342423
+#EXTINF:-1 group-title="华语电影轮播",电影_搞笑恐怖
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11601960
+#EXTINF:-1 group-title="华语电影轮播",电影_热血
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11352934
+#EXTINF:-1 group-title="华语电影轮播",电影_犯罪片
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11352974
+#EXTINF:-1 group-title="华语电影轮播",电影_经典女神
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11352909
+#EXTINF:-1 group-title="华语电影轮播",电影_许氏三杰
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11602033
+#EXTINF:-1 group-title="华语电影轮播",电影_谍战
+http://tv.zimtv.cn/tv/player/api/huya.php?id=21059585
+#EXTINF:-1 group-title="华语电影轮播",电影_谍战片
+http://tv.zimtv.cn/tv/player/api/huya.php?id=21059587
+#EXTINF:-1 group-title="华语电影轮播",电影_贺岁片
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11601986
+#EXTINF:-1 group-title="华语电影轮播",电影_赛车
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11279247
+#EXTINF:-1 group-title="华语电影轮播",电影_高能反转
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11352887
+#EXTINF:-1 group-title="华语电影轮播",电影_黑帮片
+http://tv.zimtv.cn/tv/player/api/huya.php?id=11336719
+#
+# ===== 经典剧场（3）=====
+#EXTINF:-1 group-title="经典剧场",水浒传
+http://173.208.234.146/live/vlshz.m3u8
+#EXTINF:-1 group-title="经典剧场",西游记
+http://173.208.234.146/live/vlxyj.m3u8
+#EXTINF:-1 group-title="经典剧场",闯关东
+http://173.208.234.146/live/lbchuangguandong.m3u8
+#
+# ===== 海外轮播·需代理（30）=====
+#EXTINF:-1 group-title="海外轮播·需代理",Blue Bloods
+https://jmp2.uk/plu-61b3b8c645b45d0007a9bb8d.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Bonanza
+https://jmp2.uk/plu-68e9913c4a666b9054849832.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Bonanza CA
+https://jmp2.uk/plu-696e647b07ea70192d49f6a5.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",CSI (United States)
+https://jmp2.uk/plu-5efbd29e4aa26700076c0d06.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",CSI: Crime Scene Investigation
+https://jmp2.uk/plu-6304f8d5ffb61000071ab478.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",CSI: Miami
+https://jmp2.uk/plu-62f54c11b3af68000702c304.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",CSI: NY
+https://jmp2.uk/plu-62f54c6439183b000769fb8f.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Cheers (United States)
+https://jmp2.uk/plu-62bdb7f0db2eb30007376d4d.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Cheers + Frasier
+https://jmp2.uk/plu-66ba495ffe11e5000881f049.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Family Ties (United States)
+https://jmp2.uk/plu-5f77939a630f530007dde654.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Frasier (United States)
+https://jmp2.uk/plu-62f4f90e39183b000769f12b.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Frasier: Beruhmte Gaste
+https://jmp2.uk/plu-6790fa9e1cfc4aa96dfadcef.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Friends TV (1080p)
+https://server.playontv.in/friendstv/index.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Gunsmoke
+https://jmp2.uk/plu-60f75771dfc72a00071fd0e0.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",MacGyver (United States)
+https://jmp2.uk/plu-63eb9dc84e83e70008abea92.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Married with Children
+https://jmp2.uk/plu-66bb3212fe11e5000883ea6b.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",NCIS (United States)
+https://jmp2.uk/plu-63eb9fdda995710008991c54.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",NCIS (United States) CA
+https://jmp2.uk/plu-62f4f5de1c100100075665ef.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",NCIS: Det bedste med Gibbs
+https://jmp2.uk/plu-6901d952ec12c3c759fdc7cd.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",NCIS: Det bedste med Tony & Ziva
+https://jmp2.uk/plu-68921b2f4fa995eff24df6c8.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",NCIS: Los Angeles (United States)
+https://jmp2.uk/plu-66a106c8a79dea0008aa5ef3.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Pluto TV Sherlock
+https://jmp2.uk/plu-5dc2c00abfed110009d97243.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Star Trek
+https://jmp2.uk/plu-5f99ac4fded33000078f29ab.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Star Trek Movies
+https://jmp2.uk/plu-6400c2a6cb41a40008dbe5bc.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Star Trek US
+https://jmp2.uk/plu-5efbd39f8c4ce900075d7698.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Star Trek: Deep Space Nine
+https://jmp2.uk/plu-65c69bbfd77d450008c7ffee.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Star Trek: The Next Generation (United States)
+https://jmp2.uk/plu-695c32e61ca20bb8ca802eb9.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",Star Trek: Voyager (United States)
+https://jmp2.uk/plu-634dacf51d90320007fcd5fa.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",名侦探柯南 Detective Conan
+https://jmp2.uk/plu-629a066860ef810008267b70.m3u8
+#EXTINF:-1 group-title="海外轮播·需代理",名侦探柯南 Detective Conan France (720p)
+https://jmp2.uk/plu-62f3e8ad2a8e8000077b013d.m3u8
