@@ -1,5 +1,5 @@
 {
-  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/niubihu1/tvbox/main/jar/easy1008.jar;md5;b5c71cca5b4e242af6feb755e9cac308 http://oss4liview.moji.com/thd_file/2026/10/26/837a77b77fc98aba6b97856944e94d7c.jpg;md5;722d5c1bdcb1b38fc62874941e060d6b http://oss4liview.moji.com/thd_file/2026/10/31/272e922132480799981a031067b6d722.jpg;md5;8605fb93b9d2ba66e702fdbfcc496159 http://oss4liview.moji.com/thd_file/2026/11/02/c9050ddf2e4eb65bc925f27924695099.jpg;md5;a5006e8f9c77331a30309c0e5f138481 http://oss4liview.moji.com/thd_file/2026/11/03/b1838e86a7164d1031cb5940af34ad7c.jpg;md5;a1dadb8ef5197d9ee9c8fde926aae2e2 http://oss4liview.moji.com/thd_file/2026/11/04/690e7f13e63718e6ea88add0c59d4289.jpg;md5;86cb2cdcd99e29334004b80e48007e9a",
+  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/niubihu1/tvbox/main/jar/easy1008.jar;md5;b5c71cca5b4e242af6feb755e9cac308 http://oss4liview.moji.com/thd_file/2026/10/26/837a77b77fc98aba6b97856944e94d7c.jpg;md5;722d5c1bdcb1b38fc62874941e060d6b http://oss4liview.moji.com/thd_file/2026/10/31/272e922132480799981a031067b6d722.jpg;md5;8605fb93b9d2ba66e702fdbfcc496159 http://oss4liview.moji.com/thd_file/2026/11/02/c9050ddf2e4eb65bc925f27924695099.jpg;md5;a5006e8f9c77331a30309c0e5f138481 http://oss4liview.moji.com/thd_file/2026/11/03/b1838e86a7164d1031cb5940af34ad7c.jpg;md5;a1dadb8ef5197d9ee9c8fde926aae2e2 http://oss4liview.moji.com/thd_file/2026/11/04/690e7f13e63718e6ea88add0c59d4289.jpg;md5;86cb2cdcd99e29334004b80e48007e9a http://oss4liview.moji.com/thd_file/2026/11/06/99191348af7606ed51e66a4f13a85d8e.jpg;md5;53e039fb19875d5cfec02a0910399ffd",
   "sites": [
     {
       "key": "豆瓣",
@@ -3806,6 +3806,23 @@
         "danmu_api": "https://dm.211.li/nonay"
       },
       "jar": "https://gh-proxy.com/https://raw.githubusercontent.com/Venus521/movie-sources/main/jar/demo_spider.jar"
+    },
+    {
+      "key": "下饭",
+      "name": "💥下饭┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAiJuXiaFanGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0
+    },
+    {
+      "key": "SoAiQuanPanGuard",
+      "name": "🎠全盘┃综合🎠",
+      "type": 3,
+      "api": "csp_SoAiQuanPanGuard",
+      "searchable": 1,
+      "changeable": 0
     }
   ],
   "rules": [
