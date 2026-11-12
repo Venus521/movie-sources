@@ -68,6 +68,51 @@ SOURCES = [
 # 镜像后的 jar 由 movie-sources 自己托管；md5 在下载时现算
 DEMO_JAR_MIRROR = "https://gh-proxy.com/https://raw.githubusercontent.com/Venus521/movie-sources/main/jar/demo_spider.jar"
 
+# lite lives: the ONLY source of truth for movie-lite.json lives.
+# WINBOX desktop keeps just these 5; upstream merges bring back dead
+# 127.0.0.1:35457 feiyang entries and a duplicate TV entry, so lite
+# must NOT reuse the merged `lives`. movie.json still uses the full list.
+LITE_LIVES = json.loads(r"""
+[
+  {
+    "name": "看电视·精选 10-30",
+    "type": "multi",
+    "url": "https://venus-hub.pages.dev/tv/live.m3u",
+    "timeout": 30
+  },
+  {
+    "name": "🐯牛虎 ┃ 官方综合",
+    "type": 0,
+    "url": "https://gh-proxy.com/https://raw.githubusercontent.com/niubihu1/tvbox/main/live.txt",
+    "playerType": 1,
+    "ua": "okhttp/3.15",
+    "epg": "http://epg.112114.xyz/?ch={name}&date={date}",
+    "logo": "https://epg.112114.xyz/logo/{name}.png",
+    "timeout": 30
+  },
+  {
+    "name": "综合直播",
+    "type": 0,
+    "playerType": 2,
+    "url": "http://193.123.86.190:14888/TV/iptv.php",
+    "ua": "bingcha/1.1 (mianfeifenxiang) ",
+    "timeout": 30
+  },
+  {
+    "name": "直播源",
+    "type": "multi",
+    "url": "https://fastly.jsdelivr.net/gh/Venus521/tv-cdn@main/live.m3u",
+    "timeout": 30
+  },
+  {
+    "name": "追剧轮播·动漫+剧集",
+    "type": "multi",
+    "url": "https://fastly.jsdelivr.net/gh/Venus521/movie-sources@main/loop.m3u",
+    "timeout": 30
+  }
+]
+""")
+
 
 def fetch(urls):
     for u in urls:
@@ -289,7 +334,7 @@ def main():
         "sites": lite_sites,
         "rules": rules,
         "flags": flags,
-        "lives": lives,
+        "lives": LITE_LIVES,
         "parses": parses,
         "ads": ads,
     }
@@ -302,7 +347,7 @@ def main():
     with open(dst_lite, "w", encoding="utf-8", newline="\n") as f:
         json.dump(out_lite, f, ensure_ascii=False, indent=2)
     print(f"写出 movie-lite.json: {len(lite_sites)} 站点（纯直连，无 spider）"
-          f" / {len(lives)} 直播 / {len(parses)} 解析")
+          f" / {len(LITE_LIVES)} 直播 / {len(parses)} 解析")
 
     if push:
         print("\n>>> git push (SSH) ...")
@@ -319,7 +364,7 @@ def main():
         env = os.environ.copy()
         env["GIT_SSH_COMMAND"] = "ssh -o StrictHostKeyChecking=no"
         rc = subprocess.run(
-            "git push origin main", shell=True, cwd=here, env=env,
+            "git push origin main", shell=True, cwd=HERE, env=env,
         ).returncode
         print("push rc =", rc)
 
