@@ -63,6 +63,16 @@ SOURCES = [
         "https://gh-proxy.org/raw.githubusercontent.com/ggrrttyyiii/CatVodSpider/refs/heads/main/json/demo.json",
         "https://fastly.jsdelivr.net/gh/ggrrttyyiii/CatVodSpider@main/json/demo.json",
     ]),
+    # F: 天微科技(vcloudc/tvbox) — 115 站，主要是 type=3（spider 在它的 spider 字段里，安卓壳能吃），
+    #    另有 3 个 type=1 直连给 WINBOX。全量并进，lite 自动筛 type!=3。
+    ("F_tianwei", [
+        "https://gh-proxy.com/https://raw.githubusercontent.com/vcloudc/tvbox/main/tw/api.json",
+        "https://ghfast.top/https://raw.githubusercontent.com/vcloudc/tvbox/main/tw/api.json",
+    ]),
+    # G: 欧歌(api.iptv365.org/欧歌/api.json) — 106 站，type=3 为主 + 1 个 type=1 直连；直链，CI 可取。
+    ("G_ouge", [
+        "https://play.iptv365.org/%E6%AC%A7%E6%AD%8C/api.json",
+    ]),
 ]
 
 # 镜像后的 jar 由 movie-sources 自己托管；md5 在下载时现算
@@ -296,6 +306,17 @@ def main():
                 print(f"  丢弃损坏的 danmaku（单字符数组，{len(dm)} 项）")
         if not wallpaper and d.get("wallpaper"):
             wallpaper = d.get("wallpaper")
+
+    # 本地落地的直连源：胜寒等已验证的 type=1 站（绝对 API，WINBOX 可直接放），
+    # 零网络依赖——CI 每 4h 重建不会再因代理限流把这批站冲掉。
+    local_direct = os.path.join(HERE, "direct_sites.json")
+    if os.path.exists(local_direct):
+        try:
+            ds = json.load(open(local_direct, encoding="utf-8")).get("sites", [])
+            sites.extend(ds)
+            print(f"  本地直连源 direct_sites.json: +{len(ds)} 站")
+        except Exception as e:
+            print(f"  [本地直连源读取失败] {e}")
 
     sites = dedup_merge(sites, lambda s: s.get("key"))
     sites = drop_unresolvable(sites, spiders)
