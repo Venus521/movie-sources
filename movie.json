@@ -5870,6 +5870,30 @@
         "港台综艺",
         "日韩综艺"
       ]
+    },
+    {
+      "key": "demo_ShanJu",
+      "name": "⚡闪剧┃影视",
+      "type": 3,
+      "api": "csp_ShanJu",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "timeout": 15,
+      "ext": {},
+      "jar": "https://gh-proxy.com/https://raw.githubusercontent.com/Venus521/movie-sources/main/jar/demo_spider.jar"
+    },
+    {
+      "key": "demo_Shipu",
+      "name": "🥘AI漫剧┃漫剧",
+      "type": 3,
+      "api": "csp_Shipu",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "timeout": 15,
+      "ext": {},
+      "jar": "https://gh-proxy.com/https://raw.githubusercontent.com/Venus521/movie-sources/main/jar/demo_spider.jar"
     }
   ],
   "rules": [
