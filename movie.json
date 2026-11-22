@@ -6380,6 +6380,29 @@
       "api": "csp_XPath",
       "searchable": 0,
       "quickSearch": 0
+    },
+    {
+      "key": "移动",
+      "name": "💡移动｜影视",
+      "type": 3,
+      "api": "csp_YD",
+      "searchable": 1,
+      "quickSearch": 1
+    },
+    {
+      "key": "奇优影视",
+      "name": "💡奇优｜影视",
+      "type": 3,
+      "api": "csp_Qiyou"
+    },
+    {
+      "key": "天堂",
+      "name": "🎃美剧┃磁力",
+      "type": 3,
+      "api": "csp_MeijuTT",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
     }
   ],
   "rules": [
