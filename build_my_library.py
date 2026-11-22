@@ -119,6 +119,12 @@ LITE_LIVES = json.loads(r"""
     "type": "multi",
     "url": "https://fastly.jsdelivr.net/gh/Venus521/movie-sources@main/loop.m3u",
     "timeout": 30
+  },
+  {
+    "name": "🌏东南亚国际台┃Astro套餐",
+    "type": "multi",
+    "url": "https://fastly.jsdelivr.net/gh/Venus521/movie-sources@main/lives/sea_intl.m3u",
+    "timeout": 30
   }
 ]
 """)
