@@ -130,6 +130,10 @@ LITE_LIVES = json.loads(r"""
 """)
 
 
+# lives 黑名单：上游合并会带回已确认失效的线路，每次重建统一剔除（2026-11-22）
+LIVES_DROP = {"AI线-不能看切换其他线路", "an装🅱na", "冰茶④", "备用"}
+
+
 def fetch(urls):
     for u in urls:
         try:
@@ -327,6 +331,7 @@ def main():
     sites = dedup_merge(sites, lambda s: s.get("key"))
     sites = drop_unresolvable(sites, spiders)
     lives = dedup_merge(lives, lambda x: (x.get("name") or str(x))[:40])
+    lives = [x for x in lives if (x.get("name") or "") not in LIVES_DROP]
     parses = dedup_merge(parses, lambda x: x.get("name") or json.dumps(x, ensure_ascii=False)[:60])
     rules = dedup_merge(rules, lambda x: x.get("name") or json.dumps(x, ensure_ascii=False)[:60])
     flags = dedup_merge(flags, lambda x: json.dumps(x, ensure_ascii=False)[:80])
